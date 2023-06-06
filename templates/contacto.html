@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <title>Shop Homepage - Start Bootstrap Template</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}" />
+    </head>
+    <body>
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container px-px-lg-5">
+                <div class="logoContainer">
+                    <img src="../static/img/Logo.png" alt="Logo" class="logo">
+                </div>
+                <a class="navbar-brand" hr4 ef="#!">PichoTech</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('home')}}">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{url_for('acerca')}}">Acerca De</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Venta</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{{url_for('todoslosproductos')}}">Todos Los Productos</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="{{url_for('articulospopu')}}">Articulos Populares</a></li>
+                                <li><a class="dropdown-item" href="{{url_for('recienllegados')}}">Los Recién Llegados</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="margen">
+                    <div class="d-flex formCart">
+                        <button class="btn btn-outline-dark navbar-shopping-cart" type="submit">
+                            <i class="bi-cart-fill me-1"></i>
+                            Carrito
+                            <span class="badge bg-dark text-white ms-1 rounded-pill">{{ count }}</span>
+                        </button>
+                    </div>
+                    </div>
+                    {% if name %}
+                    <div class="margen">
+                    <p>{{name}}</p>
+                    </div>
+                    <div class="margen">
+                    <form class="d-flex">
+                        <a href="{{ url_for('logout') }}" class="btn btn-outline-dark">
+                            Cerrar Sesión
+                            <span class="badge bg-dark text-white ms-1 rounded-pill"></span>
+                        </a>
+                        </a>
+                    </form>
+                    </div>
+                    {% else %}
+                        <form class="d-flex margen">
+                            <a href="{{ url_for('login_register') }}" class="btn btn-outline-dark">
+                                Iniciar Sesión
+                                <span class="badge bg-dark text-white ms-1 rounded-pill"></span>
+                            </a>
+                            </a>
+                        </form>
+                    {% endif %}
+                    <div class="margen">
+                    </div>
+                    <form class="d-flex formCart">
+                        <a class="btn btn-outline-dark" href="{{url_for('contacto')}}" type="submit">
+                            Contáctenos
+                            <span class="badge bg-dark text-white ms-1 rounded-pill"></span>
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </nav>
+
+        <aside class="product-detail inactive" id="shoppingCartContainer">
+            <div class="container">
+
+                <div class="shopping-cart-title">
+                    <img src="../static/Icons/flechita.svg" alt="arrow" class="arrow">
+                    <p>Carrito de compras</p>
+                </div>
+                <div class="all-carts">
+
+                    {% for item in carrito %}
+                    <div class="shopping-cart">
+                        <figure>
+                            <img class="card-img-top" src="../static/img/{{ item['img'] }}" alt="..." />
+                        </figure>
+                        <p>{{ item['name']}}</p>
+                        <p>${{ '{:,.0f}'.format(item['price']) }}</p>
+                        <form method="POST" action="{{ url_for('home') }}">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="code" value="{{ item['pid'] }}">
+                            <input type="submit" src="../static/Icons/icon_close.png" value="x" alt="clase" class="icon-close-img">
+                        </form>
+                    </div>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+            <div class="container2">
+                <div class="order">
+                    <span>Total</span>
+                    <p>${{ '{:,.0f}'.format(totalprice) }}</p>
+                </div>
+                
+                    <button href="{{ url_for('compra') }}" class="primary-button add-button">
+                        <a href="{{ url_for('compra') }}" class="primary-button add-button">
+                            Checkout
+                        </a>
+                    </button>
+                
+            </div>
+
+        </aside>
+                <!-- Header-->
+                <header class="bg-dark py-5">
+                    <div class="container px-4 px-lg-5 my-5">
+                        <div class="text-center text-white">
+                            <h1 class="display-4 fw-bolder">Compra Con Estilo</h1>
+                            <p class="lead fw-normal text-white-50 mb-0">La mejor tecnología al alcance de tus manos</p>
+                        </div>
+                    </div>
+                </header>
+    <title>Formulario de Contacto</title>
+    <!--Icon-Font-->
+    <script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container-form">
+        <div class="info-form">
+            <p>
+                Gracias por visitar nuestra página de contacto. Estamos emocionados de recibir tus consultas, comentarios y sugerencias relacionadas con la tecnología. Nos encantaría saber más sobre ti y cómo podemos ayudarte.
+                
+                Si tienes alguna pregunta sobre nuestros productos o servicios, o si necesitas asistencia técnica, nuestro equipo de expertos está listo para brindarte la mejor atención. Estamos comprometidos a responder a todas tus consultas de manera oportuna y brindarte soluciones efectivas.</p>
+            <a href="#"><i class="fa fa-phone"></i> 315-739-2376</a>
+            <a href="#"><i class="fa fa-envelope"></i> pichotech11@gmail.com</a>
+            <a href="#"><i class="fa fa-map-marked"></i> Bogotá, Colombia</a>
+        </div>
+        <form action="#" autocomplete="off">
+            <input type="text" name="nombre" placeholder="Tu Nombre" class="campo">
+            <input type="emal" name="email" placeholder="Tu Email" class="campo">
+            <textarea name="mensaje" placeholder="Tu Mensaje..."></textarea>
+            <input type="submit" name="enviar" value="Enviar Mensaje" class="btn-enviar">
+        </form>
+    </div>
+     <!-- Footer-->
+     <footer class="py-5 bg-dark">
+        <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Picho PichoTech 2023</p></div>
+    </footer>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
+
+
